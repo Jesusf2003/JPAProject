@@ -5,7 +5,7 @@ package com.user.jpa.dao;
 
 import java.util.List;
 
-import com.user.jpa.entity.Productos;
+import com.user.jpa.entity.Producto;
 
 /**
  * @author chema
@@ -14,8 +14,13 @@ import com.user.jpa.entity.Productos;
  */
 public interface ProductoDao {
 	
-	void guardar (Productos prod) throws Exception;
-	void actualizar (Productos prod) throws Exception;
+	void guardar (Producto prod) throws Exception;
+	
+	void actualizar (Producto prod) throws Exception;
+	
 	void eliminar (int id) throws Exception;
-	List<Productos> consultar();
+	
+	List<Producto> consultar();
+	
+	Producto consultarById(int id);
 }

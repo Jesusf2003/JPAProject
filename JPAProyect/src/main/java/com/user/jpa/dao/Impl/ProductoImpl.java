@@ -7,12 +7,13 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
 import com.user.jpa.dao.ProductoDao;
-import com.user.jpa.entity.Productos;
+import com.user.jpa.entity.Producto;
 
 /**
  * @author chema
@@ -24,7 +25,7 @@ public class ProductoImpl implements ProductoDao {
 	private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("JPAProyect");
 
 	@Override
-	public void guardar(Productos prod) throws Exception {
+	public void guardar(Producto prod) throws Exception {
 		EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
 		
 		EntityTransaction et = em.getTransaction();
@@ -44,7 +45,7 @@ public class ProductoImpl implements ProductoDao {
 	}
 
 	@Override
-	public void actualizar(Productos prod) throws Exception {
+	public void actualizar(Producto prod) throws Exception {
 		EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
 		
 		EntityTransaction et = em.getTransaction();
@@ -67,7 +68,7 @@ public class ProductoImpl implements ProductoDao {
 	public void eliminar(int id) throws Exception {
 		EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
 		
-		Productos productoConsulta = em.find(Productos.class, id);
+		Producto productoConsulta = em.find(Producto.class, id);
 		
 		EntityTransaction et = em.getTransaction();
 		et.begin();
@@ -86,9 +87,21 @@ public class ProductoImpl implements ProductoDao {
 	}
 
 	@Override
-	public List<Productos> consultar() {
+	public List<Producto> consultar() {
 		EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
-		TypedQuery<Productos> queryProd = (TypedQuery<Productos>) em.createQuery("FROM PRODUCTO ORDER BY DESC");
+		TypedQuery<Producto> queryProd = (TypedQuery<Producto>) em.createQuery("from Producto order by NOMPRO");
 		return queryProd.getResultList();
+	}
+
+	@Override
+	public Producto consultarById(int id) {
+		EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
+		
+		Producto prodConsulta = em.find(Producto.class, id);
+		
+		if (prodConsulta == null) {
+			throw new EntityNotFoundException("El producto con id "+ id +" no se econtró.");
+		}
+		return prodConsulta;
 	}
 }
